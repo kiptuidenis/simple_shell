@@ -43,9 +43,7 @@ void execute_command(char *command)
 {
 	pid_t pid;
 
-	command[strcspn(command, "\n")] = '\0';  /* Remove the trailing newline
-						  *character
-						  */
+	command[strcspn(command, "\n")] = '\0';
 
 	pid = fork();  /* Fork a child process */
 	if (pid < 0)
@@ -56,24 +54,29 @@ void execute_command(char *command)
 	else if (pid == 0)
 	{
 		/* Child process */
-		char *argv[2];
+		char *arg;
+		char *argv[BUFFER_SIZE];
+		int i = 0;
 
-		argv[0] = command;
-		argv[1] = NULL;
-
-		execve(command, argv, NULL);  /* Execute the command without
-					       *handling PATH
-					       */
-		perror("./shell");  /* Print an error if execve fails */
-		exit(EXIT_FAILURE);
+		arg = strtok(command, " \t\n");
+		while (arg != NULL)
+		{
+			argv[i] = arg;  /* Add token to the argument list */
+			i++;
+			arg = strtok(NULL, " \t\n");
+		}
+		argv[i] = NULL;
+		if (execve(argv[0], argv, NULL) == -1)
+		{
+			perror("execve");  /* Print an error if execve fails */
+			exit(EXIT_FAILURE);
+		}
 	}
 	else
 	{
 		/* Parent process */
 		int status;
 
-		waitpid(pid, &status, 0);  /* Wait for the child process
-					    *to finish
-					    */
+		waitpid(pid, &status, 0);
 	}
 }
