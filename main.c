@@ -73,8 +73,8 @@ void execute_command(char *command)
 		/* Parent process */
 		int status;
 
-		waitpid(pid, &status, 0);  /* Wait for the child process
-					    *to finish
+		waitpid(pid, &status, 0);  /* Wait for the child process to
+					    *finish
 					    */
 	}
 }
@@ -86,23 +86,26 @@ void execute_command(char *command)
  */
 int main(void)
 {
+	char *command;
+
 	while (1)
 	{
-		char *command = read_command();  /* Read the command line */
-
 		display_prompt();  /* Display the prompt */
+
+		command = read_command();  /* Read the command line */
+
 		if (command == NULL)
 		{
 			printf("\n");
-			break;  /* Exit the shell if end of file (Ctrl+D) is
-				 *encountered
-				 */
+			break;  /* Exit the shell if end of file (Ctrl+D) is encountered */
 		}
 
-		execute_command(command);  /* Execute the command */
+		if (*command != '\0')  /* Check if the command is not empty */
+			execute_command(command);  /* Execute the command */
 
 		free(command);  /* Free the allocated memory */
 	}
 
 	return (0);
 }
+
