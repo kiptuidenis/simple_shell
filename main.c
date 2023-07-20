@@ -64,7 +64,7 @@ void execute_command(char *command)
 
 		if (execvp(command, argv) == -1)
 		{
-			perror("execvp");
+			perror("./shell");
 			exit(EXIT_FAILURE);
 		}
 	}
