@@ -68,7 +68,7 @@ void execute_command(char *command)
 		argv[i] = NULL;
 		if (execve(argv[0], argv, NULL) == -1)
 		{
-			perror("execve");  /* Print an error if execve fails */
+			perror("./shell_0.2");  /* Print an error if execve fails */
 			exit(EXIT_FAILURE);
 		}
 	}
