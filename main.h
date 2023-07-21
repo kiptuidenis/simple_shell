@@ -2,6 +2,7 @@
 #define MAIN_H
 
 #define BUFFER_SIZE 1024
+#define EXIT_COMMAND "exit"
 
 void display_prompt(void);
 char *read_command(void);

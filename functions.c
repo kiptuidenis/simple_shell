@@ -6,6 +6,7 @@
 #include <string.h>
 #include "main.h"
 
+
 /**
  * read_command - Reads a command line from stdin.
  *
@@ -91,6 +92,11 @@ void run_command(char *command)
 void execute_command(char *command)
 {
 	pid_t pid = create_child_process();
+
+	if (strcmp(command, "exit\n") == 0)
+	{
+		exit(EXIT_SUCCESS);
+	}
 
 	if (pid == 0)
 	{

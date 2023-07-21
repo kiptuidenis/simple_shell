@@ -45,4 +45,3 @@ void display_prompt(void)
 {
 	printf("#cisfun$ "); /* Display a simple prompt */
 }
-
