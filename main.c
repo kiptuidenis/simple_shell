@@ -37,3 +37,12 @@ int main(void)
 
 	return (0);
 }
+
+/**
+ * display_prompt - Displays a simple prompt.
+ */
+void display_prompt(void)
+{
+	printf("#cisfun$ "); /* Display a simple prompt */
+}
+
