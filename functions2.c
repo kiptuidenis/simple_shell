@@ -11,7 +11,7 @@
  */
 void display_prompt(void)
 {
-	printf("#cisfun$ "); /* Display a simple prompt */
+	printf("$ "); /* Display a simple prompt */
 }
 
 /**

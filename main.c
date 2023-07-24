@@ -24,7 +24,7 @@ int main(void)
 		if (command == NULL)
 		{
 			printf("\n");
-			break;  /* Exit the shell if end of file
+			return (0);  /* Exit the shell if end of file
 				 *(Ctrl+D) is encountered
 				 */
 		}

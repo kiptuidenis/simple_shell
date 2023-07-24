@@ -25,6 +25,9 @@ char *read_command(void)
 		return (NULL);
 	}
 
+	if (num_chars > 0 && command[num_chars - 1] == '\n')
+		command[num_chars - 1] = '\0';
+
 	return (command);
 }
 
@@ -74,6 +77,8 @@ void run_command(char *command)
 	char *full_path;
 
 	command[strcspn(command, "\n")] = '\0';
+	if (command[strlen(command) - 1] == '\n')
+		command[strlen(command) - 1] = '\0';
 
 	arg = strtok(command, " \t\n");
 	while (arg != NULL)
@@ -115,12 +120,15 @@ void execute_command(char *command)
 {
 	pid_t pid = create_child_process();
 
-	if (strcmp(command, "exit\n") == 0)
+	if (command[strlen(command) - 1] == '\n')
+		command[strlen(command) - 1] = '\0';
+
+	if (strcmp(command, "exit") == 0 || strcmp(command, "exit\n") == 0)
 	{
 		free(command);
 		exit(EXIT_SUCCESS);
 	}
-	else if (strcmp(command, "env\n") == 0)
+	else if (strcmp(command, "env") == 0 || strcmp(command, "env\n") == 0)
 	{
 		print_environment();
 	}
