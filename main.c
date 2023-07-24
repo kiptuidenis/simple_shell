@@ -38,33 +38,3 @@ int main(void)
 	return (0);
 }
 
-/**
- * display_prompt - Displays a simple prompt.
- */
-void display_prompt(void)
-{
-	printf("#cisfun$ "); /* Display a simple prompt */
-}
-
-/**
- * print_environment - Prints the current environment variables.
- */
-void print_environment(void)
-{
-	extern char **environ; /* External variable containing the environment */
-	char **env_ptr;
-
-	if (environ == NULL)
-	{
-		printf("Environment not available.\n");
-		return;
-	}
-
-	env_ptr = environ;
-	while (*env_ptr != NULL)
-	{
-		printf("%s\n", *env_ptr);
-		env_ptr++;
-	}
-}
-

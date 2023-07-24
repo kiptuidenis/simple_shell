@@ -48,6 +48,21 @@ pid_t create_child_process(void)
 }
 
 /**
+ * free_tokens - Frees the memory allocated for each token.
+ * @argv: The argument list containing tokens.
+ * @count: The number of tokens in the argument list.
+ */
+void free_tokens(char **argv, int count)
+{
+	int j;
+
+	for (j = 0; j < count; j++)
+	{
+		free(argv[j]);
+	}
+}
+
+/**
  * run_command - Executes a command inside the child process.
  * @command: The command to execute.
  */
@@ -63,11 +78,13 @@ void run_command(char *command)
 	arg = strtok(command, " \t\n");
 	while (arg != NULL)
 	{
-		argv[i] = arg; /* Add token to the argument list */
+		argv[i] = strdup(arg); /* Add token to the argument list */
 		i++;
 		arg = strtok(NULL, " \t\n");
 	}
 	argv[i] = NULL;
+
+	free(command);
 
 	/* Find the full path of the command using PATH */
 	full_path = find_command(argv[0]);
@@ -75,15 +92,20 @@ void run_command(char *command)
 	if (full_path == NULL)
 	{
 		printf("Command not found: %s\n", argv[0]);
+		free_tokens(argv, i);
 		exit(EXIT_FAILURE);
 	}
 
 	if (execve(full_path, argv, NULL) == -1)
 	{
 		perror("shell"); /* Print an error if execve fails */
+		free_tokens(argv, i);
 		exit(EXIT_FAILURE);
 	}
+
+	free_tokens(argv, i);
 }
+
 
 /**
  * execute_command - Executes a command.
@@ -95,6 +117,7 @@ void execute_command(char *command)
 
 	if (strcmp(command, "exit\n") == 0)
 	{
+		free(command);
 		exit(EXIT_SUCCESS);
 	}
 	else if (strcmp(command, "env\n") == 0)
@@ -110,52 +133,8 @@ void execute_command(char *command)
 	{
 		/* Parent process */
 		int status;
+
 		waitpid(pid, &status, 0);
 	}
-}
-/**
- * find_command - Searches for the command in the PATH directories.
- * @command: The command to find.
- *
- * Return: The full path to the command if found, otherwise NULL.
- */
-char *find_command(char *command)
-{
-	char *path = getenv("PATH");
-	char *dir;
-	char *full_path = (char *)malloc(BUFFER_SIZE * sizeof(char));
-
-	/* Check if the command is already a full path */
-	if (command[0] == '/')
-	{
-		/* Check if the full path is executable */
-		if (access(command, X_OK) == 0)
-		{
-			return (strdup(command)); /* Return a copy of the full path */
-		}
-		return (NULL); /* Command is a full path, but not executable */
-	}
-
-	if (path == NULL || full_path == NULL)
-	{
-		perror("shell");
-		exit(EXIT_FAILURE);
-	}
-
-	dir = strtok(path, ":");
-	while (dir != NULL)
-	{
-		snprintf(full_path, BUFFER_SIZE, "%s/%s", dir, command);
-
-		if (access(full_path, X_OK) == 0)
-		{
-			return (full_path);
-		}
-
-		dir = strtok(NULL, ":");
-	}
-
-	free(full_path);
-	return (NULL); /* Command not found in any PATH directory */
 }
 
