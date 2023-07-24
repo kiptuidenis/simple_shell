@@ -97,7 +97,7 @@ void run_command(char *command)
 
 	if (full_path == NULL)
 	{
-		printf("Command not found: %s\n", argv[0]);
+		printf("%s: not found\n", argv[0]);
 		free_tokens(argv, i);
 		exit(EXIT_FAILURE);
 	}

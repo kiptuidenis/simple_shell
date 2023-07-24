@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 		while (command != NULL)
 		{
 			if (*command != '\0')  /* Check if the command is not empty */
-			execute_command(command);  /* Execute the command */
+				execute_command(command);  /* Execute the command */
 
 			free(command);  /* Free the allocated memory */
 			command = read_command();
