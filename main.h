@@ -10,5 +10,6 @@ void execute_command(char *command);
 char *find_command(char *command);
 pid_t create_child_process(void);
 void run_command(char *command);
+void print_environment(void);
 
 #endif

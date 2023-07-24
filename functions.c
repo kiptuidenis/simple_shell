@@ -97,8 +97,11 @@ void execute_command(char *command)
 	{
 		exit(EXIT_SUCCESS);
 	}
-
-	if (pid == 0)
+	else if (strcmp(command, "env\n") == 0)
+	{
+		print_environment();
+	}
+	else if (pid == 0)
 	{
 		/* Child process */
 		run_command(command);
@@ -107,7 +110,6 @@ void execute_command(char *command)
 	{
 		/* Parent process */
 		int status;
-
 		waitpid(pid, &status, 0);
 	}
 }
