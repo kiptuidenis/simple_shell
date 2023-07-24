@@ -14,5 +14,7 @@ pid_t create_child_process(void);
 void run_command(char *command);
 void print_environment(void);
 void free_tokens(char **argv, int count);
+void execute_piped_commands(char *first_command, char *second_command);
+void trim_whitespace(char *str);
 
 #endif

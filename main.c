@@ -8,33 +8,49 @@
 
 /**
  * main - Entry point of the program.
+ *@argc: argument count
+ *@argv: array of strings
  *
  * Return: Always 0.
  */
-int main(void)
+int main(int argc, char *argv[])
 {
 	char *command;
+	int interactive_mode = isatty(STDIN_FILENO);
+	(void)argc;
+	(void)argv;
 
-	while (1)
+	if (interactive_mode)
 	{
-		display_prompt();  /* Display the prompt */
-
-		command = read_command();  /* Read the command line */
-
-		if (command == NULL)
+		while (1)
 		{
-			printf("\n");
-			return (0);  /* Exit the shell if end of file
-				 *(Ctrl+D) is encountered
-				 */
-		}
+			display_prompt();  /* Display the prompt */
+			command = read_command();  /* Read the command line */
+			if (command == NULL)
+			{
+				printf("\n");
+				return (0);  /* Exit the shell if end of file (Ctrl+D) is encountered */
+			}
 
-		if (*command != '\0')  /* Check if the command is not empty */
+			if (*command != '\0')  /* Check if the command is not empty */
+				execute_command(command);  /* Execute the command */
+
+			free(command);  /* Free the allocated memory */
+		}
+	}
+	else
+	{
+		/* Non-interactive mode, read from standard input (e.g., pipe or file) */
+		command = read_command();
+		while (command != NULL)
+		{
+			if (*command != '\0')  /* Check if the command is not empty */
 			execute_command(command);  /* Execute the command */
 
-		free(command);  /* Free the allocated memory */
+			free(command);  /* Free the allocated memory */
+			command = read_command();
+		}
 	}
-
 	return (0);
 }
 

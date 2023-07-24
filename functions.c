@@ -16,17 +16,18 @@ char *read_command(void)
 {
 	char *command = NULL;
 	size_t buffer_size = 0;
+	ssize_t num_chars;
 
-	ssize_t num_chars = getline(&command, &buffer_size, stdin);
-
+	/* Read the command line from stdin or the input stream */
+	num_chars = getline(&command, &buffer_size, stdin);
 	if (num_chars == -1)
 	{
-		free(command);
-		return (NULL);
+	free(command);
+	return (NULL);
 	}
 
 	if (num_chars > 0 && command[num_chars - 1] == '\n')
-		command[num_chars - 1] = '\0';
+	command[num_chars - 1] = '\0';
 
 	return (command);
 }
